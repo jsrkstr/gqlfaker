@@ -1,0 +1,373 @@
+# This is sample IDL schema for GraphQL Faker.
+#
+# There are two directives you can use to enhance fake data:
+#   - @fake
+#   - @examples
+# Each directive has autocompletion working so start by typing @
+#
+# Press save or Cmd+Enter to apply the changes and update server. Switch to GraphiQL
+# on the left panel to immediately test your changes.
+# This tool also supports extending existing APIs. Check graphql-faker --help
+
+type Company {
+  id: String @fake(type: uuid)
+  name: String @fake(type:companyName)  
+  picture: String @fake(type:imageUrl)
+  balance: Float
+  cpmAllowed: Boolean
+    cpcAllowed: Boolean
+    cpmPricingStrategy: String @examples(values: ["Fixed", "RateOnTop"])
+    cpcPricingStrategy: String @examples(values: ["Fixed"])
+  cpmCutRate: Float
+  overdraftAllowed: Boolean
+  maxOverdraftAmount: Float
+  users: [User]
+  offers: [Offer]
+  credits: [Credit]
+  expenses: [Expense]
+}
+
+type Offer {
+  id: String @fake(type: uuid)
+  name: String @fake(type:productName)
+  status: String @examples(values: ["Active", "Paused"])
+  description: String @fake(type: lorem, options: {loremSize: sentences})
+    picture: String @fake(type:imageUrl)
+  advertiserDomain: String @fake(type: domainName)
+    startDate: String @fake(type: pastDate)
+  endDate: String @fake(type: futureDate)
+  campaignAggregatedOss: [String] @examples(values: ["Ios", "Android", "Other"])
+  campaignAggregatedCountryCodes: [String] @examples(values: ["FR", "DE", "IN", "US", "ES", "CR"])
+  activeCampaigns: Int
+  pausedCampaigns: Int
+  appDetail: AppDetail
+    campaigns: [Campaign]
+  company: Company
+}
+
+type Campaign {
+  id: String @fake(type: uuid)
+  name: String @fake(type:financeAccountName)
+  status: String @examples(values: ["Active", "Paused"])
+  bidPrice: Float,
+  minBidPrice: Float,
+  dailyBudget: Float,
+  overallBudget: Float,
+  countryCodes: [String] @examples(values: ["FR", "DE", "IN", "US", "ES", "CR"])
+  countryCodeListType: ListType
+  deviceOss: [String] @examples(values: ["Ios", "Android", "Other"])
+  startDate: String @fake(type: pastDate)
+  endDate: String @fake(type: futureDate)
+  startHour: Int
+  endHour: Int
+  cmpPrice: Float
+  minCmpPrice: Float
+  clickUrl: String @fake(type: url)
+  regions: [String] @fake(type: state)
+  regionListType: ListType
+  cities: [String] @fake(type: city)
+  cityListType: ListType
+  deviceTypes: [String] @examples(values: ["Iphone", "Ipad", "Ipod", "Aphone", "Atab", "Other"])
+  connectionTypes: [String] @examples(values: ["Carrier", "Lan", "Other"])
+  isps: [String] @fake(type: companyName)
+  osVersionMin: String @fake(type: semver)
+  osVersionMax: String @fake(type: semver)
+  appCategories: [String] @examples(values: ["IAB1", "IAB1-1", "IAB14", "IAB1-5", "IAB1-2"])
+  spendingMode: CampaignSpendingMode
+  manualBoost: CampaignManualBoost
+  biddingStrategy: CampaignBiddingStrategy
+  ctrModel: CampaignCTRModel
+  ctrModelTrainDays: Int
+  sameDeviceDailyCap: Int
+  deviceIdRequired: Boolean
+  iUrl: String @fake(type: url)
+  imprPixelUrls: String @fake(type: url)
+  publisherIds: [String] @fake(type: uuid)
+  publisherIdListType: ListType
+  exchangeIds: [String] @fake(type: uuid)
+  exchangeIdListType: ListType
+  creatives: [Creative]
+}
+
+type Creative {
+  id: String @examples(values: ["1", "2", "3", "4", "5"])
+  name: String @fake(type:filename)
+  offer: Offer
+  campaign: Campaign
+  active: Boolean
+  type: CreativeType
+  url: String @fake(type: imageUrl)
+  html: String @fake(type: lorem, options: {loremSize: sentences})
+  height: Int
+  width: Int
+  campaigns: [Campaign]
+}
+
+type User {
+  id: String @fake(type: uuid)
+  name: String @fake(type:fullName)
+  picture: String @fake(type:avatarUrl)
+  email: String @fake(type: email)
+  active: Boolean
+  readonly: Boolean 
+  emailNotification: Boolean
+  role: String @examples(values: ["Admin", "MediaBuyer"])
+  company: Company
+}
+
+type Credit {
+  id: String @fake(type: uuid)
+  companyId: String @fake(type: uuid)
+  createdAt: String @fake(type: pastDate)
+  amount: Float
+  comment: String @fake(type: lorem, options: { loremSize: words })
+  userId: String @fake(type: uuid)
+  user: User
+}
+
+type Expense {
+  id: String @fake(type: uuid)
+  companyId: String @fake(type: uuid)
+  amount: Float
+  balance: Float
+  startDate: String @fake(type: pastDate)
+  endDate: String @fake(type: futureDate)
+}
+
+type Report {
+  id: String @fake(type: uuid)
+  avgBidCost: Float
+  avgCpc: Float
+  avgCpm: Float
+  avgMbBidCost: Float
+  bidsDone: Int
+  bidsWon: Int
+  bidsWinRate: Float
+  clicks: Int
+  ctr: Float
+  date: String @fake(type: pastDate)
+  impressions: Int
+  overallSpentPercent: Float
+  spent: Float
+}
+
+type AppDetail {
+  id: String @fake(type: uuid)
+  name: String @fake(type:productName)
+  advertiserDomain: String @fake(type: domainName)
+    picture: String @fake(type:imageUrl)
+  deviceOs: String @examples(values: ["Ios", "Android"])
+  description: String @fake(type: lorem, options: {loremSize: sentences})
+  geo: String @examples(values: ["FR", "IN", "DE", "UK", "US"])
+  size: String @examples(values: ["10mb", "5mb", "20mb"])
+  storeUrl: String @fake(type: url)
+  osVersion: String @fake(type: semver)
+  osVersionMin: String @fake(type: semver)
+}
+
+
+input UserInput {
+  name: String
+  password: String
+  email: String
+  role: Role
+  picture: String
+  active: Boolean
+  readonly: Boolean
+  emailNotification: Boolean
+}
+
+input CompanyInput {
+  name: String
+  picture: String
+  cpmAllowed: Boolean
+    cpcAllowed: Boolean
+    cpmPricingStrategy: CPMPricingStrategy
+    cpcPricingStrategy: CPCPricingStrategy
+  cpmCutRate: Float
+  overdraftAllowed: Boolean
+  maxOverdraftAmount: Float
+}
+
+input OfferInput {
+  name: String
+  status: OfferStatus
+  Description: String
+    picture: String
+  advertiserDomain: String
+    startDate: DateTime
+  endDate: DateTime
+  userId: String
+  appId: String
+}
+
+input CampaignInput {
+  name: String
+  status: CampaignStatus
+  bidPrice: Float,
+  minBidPrice: Float,
+  dailyBudget: Float,
+  overallBudget: Float,
+  countryCodes: [String]
+  deviceOss: [String]
+    startDate: DateTime
+  endDate: DateTime
+  countryCodeListType: ListType
+  startHour: Int
+  endHour: Int
+  cmpPrice: Float
+  minCmpPrice: Float
+  clickUrl: String
+  regions: [String]
+  regionListType: ListType
+  cities: [String]
+  cityListType: ListType
+  deviceTypes: [String]
+  connectionTypes: [String]
+  isps: [String]
+  osVersionMin: String
+  osVersionMax: String
+  appCategories: [String]
+  spendingMode: CampaignSpendingMode
+  manualBoost: CampaignManualBoost
+  biddingStrategy: CampaignBiddingStrategy
+  ctrModel: CampaignCTRModel
+  ctrModelTrainDays: Int
+  sameDeviceDailyCap: Int
+  deviceIdRequired: Boolean
+  iUrl: String
+  imprPixelUrls: String
+  publisherIds: [String]
+  publisherIdListType: ListType
+  exchangeIds: [String]
+  exchangeIdListType: ListType
+}
+
+input AppDetailInput {
+  storeUrl: String
+}
+
+input CreativeInput {
+  name: String
+  offerId: String
+  campaignId: String
+  type: CreativeType
+  url: String
+  html: String
+  height: Int
+  width: Int
+}
+
+input AddCreativeInput {
+  campaignId: String!
+  active: Boolean
+}
+
+input RemoveCreativeInput {
+  campaignId: String!
+}
+
+enum CreativeType {
+  Banner
+  AdTag
+}
+
+enum OfferStatus {
+  Active
+  Paused
+}
+
+enum CampaignStatus {
+  Active
+  Paused
+}
+
+enum Role {
+  Admin
+  MediaBuyer
+}
+
+enum ListType {
+  Black
+  White
+}
+
+enum CPMPricingStrategy {
+  Fixed
+  RateOnTop
+}
+
+enum CPCPricingStrategy {
+  Fixed
+}
+
+enum CampaignSpendingMode {
+    Smooth,
+  AsFastAsPossible
+}
+
+enum CampaignManualBoost {
+  None,
+  Low,
+  Medium,
+  High
+}
+
+enum CampaignBiddingStrategy {
+  Fixed,
+  Random,
+  Linear,
+  Switch,
+  Optimal1
+}
+
+enum CampaignCTRModel {
+  VWLOGISTIC
+}
+
+scalar DateTime
+
+input FID {
+  id: String
+}
+
+input OfferFilter {
+  user: FID
+  company: FID
+}
+
+input CampaignFilter {
+  offer: FID
+}
+
+type Query {
+  allCompanies: [Company!]
+  allOffers(filter: OfferFilter): [Offer!]
+  allCampaigns(filter: CampaignFilter): [Campaign]
+  allUsers: [User]
+  allReports: [Report]
+  allCreatives(filter: CampaignFilter): [Creative]
+  company(id: String): Company
+  offer(id: String): Offer
+  campaign(id: String): Campaign
+  user(id: String): User
+}
+
+type Mutation {
+  createUser(input: UserInput): User
+  createCompany(input: CompanyInput): Company
+  createOffer(input: OfferInput): Offer
+  createCampaign(input: CampaignInput): Campaign
+  createAppDetail(input: AppDetailInput): AppDetail
+  createCreative(input: CreativeInput): Creative
+  updateUser(id: String, input: UserInput): User
+  updateCompany(id: String, input: CompanyInput): Company
+  updateOffer(id: String, input: OfferInput): Offer
+  updateCampaign(id: String, input: CampaignInput): Campaign
+  deleteCompany(id: String): Company
+  deleteCreative(id: String): Creative
+  deleteUser(id: String): User
+  addCreativeToCampaign(id: String, input: AddCreativeInput): Creative
+  removeCreativeFromCampaign(id: String, input: RemoveCreativeInput): Creative
+}
+
