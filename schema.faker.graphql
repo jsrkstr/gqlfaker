@@ -36,7 +36,7 @@ type Offer {
   advertiserDomain: String @fake(type: domainName)
     startDate: String @fake(type: pastDate)
   endDate: String @fake(type: futureDate)
-  campaignAggregatedOss: [String] @examples(values: ["Ios", "Android", "Other"])
+  campaignAggregatedOss: [DeviceOs]
   campaignAggregatedCountryCodes: [String] @examples(values: ["FR", "DE", "IN", "US", "ES", "CR"])
   activeCampaigns: Int
   pausedCampaigns: Int
@@ -55,7 +55,7 @@ type Campaign {
   overallBudget: Float,
   countryCodes: [String] @examples(values: ["FR", "DE", "IN", "US", "ES", "CR"])
   countryCodeListType: ListType
-  deviceOss: [String] @examples(values: ["Ios", "Android", "Other"])
+  deviceOss: [DeviceOs]
   startDate: String @fake(type: pastDate)
   endDate: String @fake(type: futureDate)
   startHour: Int
@@ -67,8 +67,8 @@ type Campaign {
   regionListType: ListType
   cities: [String] @fake(type: city)
   cityListType: ListType
-  deviceTypes: [String] @examples(values: ["Iphone", "Ipad", "Ipod", "Aphone", "Atab", "Other"])
-  connectionTypes: [String] @examples(values: ["Carrier", "Lan", "Other"])
+  deviceTypes: [DeviceType]
+  connectionTypes: [ConnectionType]
   isps: [String] @fake(type: companyName)
   osVersionMin: String @fake(type: semver)
   osVersionMax: String @fake(type: semver)
@@ -136,19 +136,50 @@ type Expense {
 
 type Report {
   id: String @fake(type: uuid)
-  avgBidCost: Float
-  avgCpc: Float
-  avgCpm: Float
-  avgMbBidCost: Float
-  bidsDone: Int
-  bidsWon: Int
-  bidsWinRate: Float
-  clicks: Int
-  ctr: Float
-  date: String @fake(type: pastDate)
+  bids: Int
   impressions: Int
-  overallSpentPercent: Float
+  clicks: Int
   spent: Float
+  cost: Float
+  winRate: Float
+  clickThroughRate: Float
+  costPerClick: Float
+  costPerMilli: Float
+  avgBidSpent: Float
+  avgBidCost: Float
+  
+  startDate: String @fake(type: pastDate)
+  endDate: String @fake(type: pastDate)
+    dailySpentPercent: Float
+  overallSpentPercent: Float
+  
+  year: String @examples(values: ["2015", "2016", "2017"])
+  month: String @examples(values: ["04", "05", "06"])
+  week: String @examples(values: ["25", "26", "27"])
+  weeday: String @examples(values: ["1", "2", "3"])
+  date: String @examples(values: ["2017-07-15", "2017-07-14", "2017-07-17", "2017-07-18", "2017-07-16", "2017-07-20", "2017-07-19"])
+  hour: String @examples(values: ["01","02", "03", "07", "08", "12", "15", "19", "21"])
+  exchangeId: String @fake(type: uuid)
+  publisherId: String @fake(type: uuid)
+  ip: String @fake(type: ipv4Address)
+  deviceOs: DeviceOs
+  deviceType: DeviceType
+  deviceVersion: String @fake(type: semver)
+  connectionType: ConnectionType
+  countryCode: String @examples(values: ["FR", "DE", "IN", "US", "ES", "CR"])
+  region: String @fake(type: state)
+  city: String @fake(type: city)
+  isp: String @fake(type: companyName)
+  
+  companyId: String @fake(type: uuid)
+  offerId: String @fake(type: uuid)
+  campaignId: String @fake(type: uuid)
+  creativeId: String @fake(type: uuid)
+  
+  company: Company
+  offer: Offer
+  campaign: Campaign
+  creative:Creative
 }
 
 type AppDetail {
@@ -156,7 +187,7 @@ type AppDetail {
   name: String @fake(type:productName)
   advertiserDomain: String @fake(type: domainName)
     picture: String @fake(type:imageUrl)
-  deviceOs: String @examples(values: ["Ios", "Android"])
+  deviceOs: DeviceOs
   description: String @fake(type: lorem, options: {loremSize: sentences})
   geo: String @examples(values: ["FR", "IN", "DE", "UK", "US"])
   size: String @examples(values: ["10mb", "5mb", "20mb"])
@@ -193,9 +224,9 @@ input OfferInput {
   name: String
   status: OfferStatus
   Description: String
-    picture: String
+  picture: String
   advertiserDomain: String
-    startDate: DateTime
+  startDate: DateTime
   endDate: DateTime
   userId: String
   appId: String
@@ -210,7 +241,7 @@ input CampaignInput {
   overallBudget: Float,
   countryCodes: [String]
   deviceOss: [String]
-    startDate: DateTime
+  startDate: DateTime
   endDate: DateTime
   countryCodeListType: ListType
   startHour: Int
@@ -265,6 +296,38 @@ input AddCreativeInput {
 
 input RemoveCreativeInput {
   campaignId: String!
+}
+
+input FilterInput {
+  dateStart: String
+  dateEnd: String
+  
+  companyId: String
+  offerId: String
+  campaignId: String
+  creativeId: String
+  
+  exchangeId: String
+  publisherId: String
+  
+  country: String
+  region: String
+  city: String
+  connectionType: String
+  
+  deviceOs: String
+  deviceOsVersion: String
+  deviceType: String
+  deviceModel: String
+  deviceBrand: String
+  IP: String
+  ISP: String
+  
+  year: String
+  month: String
+  week: String
+  day: String
+  date: String
 }
 
 enum CreativeType {
@@ -325,6 +388,56 @@ enum CampaignCTRModel {
   VWLOGISTIC
 }
 
+enum DeviceOs {
+  Android
+  Ios
+  Other
+}
+
+enum DeviceType {
+  Iphone,
+  Ipad,
+  Ipod,
+  Aphone,
+  Atab,
+  Other
+}
+
+enum ConnectionType {
+  Carrier,
+  Lan,
+  Other
+}
+
+enum GroupBy {
+  Year,
+  Month,
+  Week,
+  Weekday,
+  Date,
+  Hour,
+  CompanyId,
+  OfferId,
+  CampaignId,
+  CreativeId,
+  ExchangeId,
+  PublisherId,
+  DeviceOs,
+  DeviceType,
+  DeviceOsVersion,
+  DeviceBrand,
+  DeviceModel,
+  CountryCode,
+  Region,
+  City,
+  ISP,
+  ConnectionType
+  Company
+  Offer
+  Campaign
+  Creative
+}
+
 scalar DateTime
 
 input FID {
@@ -351,6 +464,7 @@ type Query {
   offer(id: String): Offer
   campaign(id: String): Campaign
   user(id: String): User
+  report(groupBy: [GroupBy], filter: FilterInput, limit: Int, Offset: Int): [Report]
 }
 
 type Mutation {
@@ -370,4 +484,6 @@ type Mutation {
   addCreativeToCampaign(id: String, input: AddCreativeInput): Creative
   removeCreativeFromCampaign(id: String, input: RemoveCreativeInput): Creative
 }
+
+
 
