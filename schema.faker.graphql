@@ -87,6 +87,7 @@ type Campaign {
   exchangeIds: [String] @fake(type: uuid)
   exchangeIdListType: ListType
   creatives: [Creative]
+  offer: Offer
 }
 
 type Creative {
@@ -170,6 +171,7 @@ type Report {
   region: String @fake(type: state)
   city: String @fake(type: city)
   isp: String @fake(type: companyName)
+  
   
   companyIddd: String @fake(type: uuid)
   offerId: String @fake(type: uuid)
@@ -484,7 +486,5 @@ type Mutation {
   deleteUser(id: String): User
   addCreativeToCampaign(id: String, input: AddCreativeInput): Creative
   removeCreativeFromCampaign(id: String, input: RemoveCreativeInput): Creative
+  cloneCampaign(id: String, name: String): Campaign
 }
-
-
-
