@@ -368,7 +368,7 @@ enum CPCPricingStrategy {
 }
 
 enum CampaignSpendingMode {
-    Smooth,
+  Smooth,
   AsFastAsPossible
 }
 
@@ -388,7 +388,8 @@ enum CampaignBiddingStrategy {
 }
 
 enum CampaignCTRModel {
-  VWLOGISTIC
+  VWLOGISTIC,
+  Beta
 }
 
 enum DeviceOs {
