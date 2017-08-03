@@ -332,6 +332,11 @@ input FilterInput {
   date: String
 }
 
+input CreditInput {
+  userId: String
+  comment: String
+  amount: Float
+}
 
 enum CreativeType {
   Banner
@@ -478,6 +483,7 @@ type Mutation {
   createCampaign(input: CampaignInput): Campaign
   createAppDetail(input: AppDetailInput): AppDetail
   createCreative(input: CreativeInput): Creative
+  createCredit(input: CreditInput): Credit
   updateUser(id: String, input: UserInput): User
   updateCompany(id: String, input: CompanyInput): Company
   updateOffer(id: String, input: OfferInput): Offer
