@@ -471,7 +471,10 @@ input OfferFilter {
 
 input CampaignFilter {
   offer: FID
+  status_in: [CampaignStatus]
+  ctrModel_in: [CampaignCTRModel]
 }
+
 
 type Query {
   allCompanies: [Company!]
