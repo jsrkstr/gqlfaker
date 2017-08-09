@@ -88,6 +88,7 @@ type Campaign {
   exchangeIdListType: ListType
   creatives: [Creative]
   offer: Offer
+  lastModelUpdate: String @examples(values: ["2017-05-19T13:00:00.417Z", "2017-05-19T13:00:42.926Z", "2017-05-19T13:01:25.682Z", "2017-05-19T13:02:08.672Z", "2017-05-19T13:02:51.160Z", "2017-05-19T13:03:35.105Z", "2017-05-19T13:04:17.723Z", "2017-05-19T13:05:00.147Z"])
 }
 
 type Creative {
@@ -196,6 +197,16 @@ type AppDetail {
   storeUrl: String @fake(type: url)
   osVersion: String @fake(type: semver)
   osVersionMin: String @fake(type: semver)
+}
+
+type ModelPerformance {
+  id: String @fake(type: uuid)
+  time: String @examples(values: ["2017-05-19T13:00:00.417Z", "2017-05-19T13:00:42.926Z", "2017-05-19T13:01:25.682Z", "2017-05-19T13:02:08.672Z", "2017-05-19T13:02:51.160Z", "2017-05-19T13:03:35.105Z", "2017-05-19T13:04:17.723Z", "2017-05-19T13:05:00.147Z"])
+  folds: Int
+  avgAuc: Float
+  avgFscore: Float
+  model: String @examples(values: ["2017-05-19-12-59-20.model", "2017-05-19-13-00-02.model", "2017-05-19-13-00-45.model", "2017-05-19-13-01-28.model", "2017-05-19-13-02-10.model", "2017-05-19-13-02-53.model", "2017-05-19-13-03-37.model", "2017-05-19-13-04-19.model"])
+  groupId: String @examples(values: ["US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50"])
 }
 
 
@@ -469,6 +480,7 @@ type Query {
   allUsers: [User]
   allReports: [Report]
   allCreatives(filter: CampaignFilter): [Creative]
+  allModelPerformances: [ModelPerformance]
   company(id: String): Company
   offer(id: String): Offer
   campaign(id: String): Campaign
@@ -494,4 +506,8 @@ type Mutation {
   addCreativeToCampaign(id: String, input: AddCreativeInput): Creative
   removeCreativeFromCampaign(id: String, input: RemoveCreativeInput): Creative
   cloneCampaign(id: String, name: String): Campaign
+  createModelPerformance(time: String, folds: Int, avgAuc: Float, avgFscore: Float, model: String, groupId: String): ModelPerformance
+  updateModelPerformance(id: String, time: String, folds: Int, avgAuc: Float, avgFscore: Float, model: String, groupId: String): ModelPerformance
+  deleteModelPerformance(id: String): ModelPerformance
+  updateCampaignModelTime(id: String): Campaign
 }
