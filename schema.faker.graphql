@@ -136,7 +136,7 @@ type Expense {
   endDate: String @fake(type: futureDate)
 }
 
-type Report {
+type ReportRow {
   id: String @fake(type: uuid)
   bids: Int
   impressions: Int
@@ -185,6 +185,11 @@ type Report {
   creative:Creative
 }
 
+type Report {
+  rows: [ReportRow],
+  totals: ReportRow
+}
+
 type AppDetail {
   id: String @fake(type: uuid)
   name: String @fake(type:productName)
@@ -209,7 +214,7 @@ type ModelPerformance {
   groupId: String @examples(values: ["US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50"])
 }
 
-input FilterInput {
+input ReportFilter {
   dateStart: String
   dateEnd: String
   
@@ -373,14 +378,13 @@ type Query {
   allOffers(filter: OfferFilter): [Offer!]
   allCampaigns(filter: CampaignFilter): [Campaign]
   allUsers: [User]
-  allReports: [Report]
   allCreatives(filter: CampaignFilter): [Creative]
   allModelPerformances: [ModelPerformance]
   company(id: String): Company
   offer(id: String): Offer
   campaign(id: String): Campaign
   user(id: String): User
-  report(groupBy: [GroupBy], filter: FilterInput, limit: Int, Offset: Int): [Report]
+  report(filter: ReportFilter, limit: Int, Offset: Int): Report
 }
 
 type Mutation {
