@@ -220,7 +220,19 @@ type Setting {
   exchanges: [String] @examples(values: ["MOBFOX", "RED", "GREEN", "YELLOW", "ORANGE", "BLUE"])
 }
 
+input RowFilter {
+    offer_in: [String]
+  campaign_in: [String]
+  company_in: [String]
+  creative_in: [String]
+  dateStart_in: [String]
+  dateEnd_in: [String]
+}
+
 input ReportFilter {
+  
+  rows_where: RowFilter
+  
   dateStart: String
   dateEnd: String
   
