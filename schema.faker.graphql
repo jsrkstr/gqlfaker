@@ -216,8 +216,8 @@ type ModelPerformance {
 
 type Setting {
   dailyBudget: Float
-  exchangeBlacklist: [String]
-  exchanges: [String]  @examples(values: ["MOBFOX", "RED", "GREEN", "YELLOW", "ORANGE", "BLUE"])
+  exchangeBlacklist: [String] @examples(values: ["MOBFOX", "RED", "GREEN", "YELLOW", "ORANGE", "BLUE"])
+  exchanges: [String] @examples(values: ["MOBFOX", "RED", "GREEN", "YELLOW", "ORANGE", "BLUE"])
 }
 
 input ReportFilter {
