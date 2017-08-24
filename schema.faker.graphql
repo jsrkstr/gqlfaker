@@ -214,6 +214,12 @@ type ModelPerformance {
   groupId: String @examples(values: ["US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50", "US STU iOS SMARTY_AOTD 320x50"])
 }
 
+type Setting {
+  dailyBudget: Float
+  exchangeBlacklist: [String]
+  exchanges: [String]  @examples(values: ["MOBFOX", "RED", "GREEN", "YELLOW", "ORANGE", "BLUE"])
+}
+
 input ReportFilter {
   dateStart: String
   dateEnd: String
@@ -385,6 +391,7 @@ type Query {
   campaign(id: String): Campaign
   user(id: String): User
   report(filter: ReportFilter, limit: Int, Offset: Int): Report
+  setting: Setting
 }
 
 type Mutation {
@@ -410,4 +417,5 @@ type Mutation {
   updateModelPerformance(id: String, time: String, folds: Int, avgAuc: Float, avgFscore: Float, model: String, groupId: String): ModelPerformance
   deleteModelPerformance(id: String): ModelPerformance
   updateCampaignModelTime(id: String): Campaign
+  updateSetting(dailyBudget: Float, exchangeBlacklist: [String]): Setting
 }
