@@ -130,52 +130,41 @@ type Expense {
 }
 
 type ReportRow {
-  id: String @fake(type: uuid)
-  bids: Int
-  impressions: Int
+  bidsDone: Int
+  bidsWon: Int
   clicks: Int
   spent: Float
-  cost: Float
-  winRate: Float
-  clickThroughRate: Float
-  costPerClick: Float
-  costPerMilli: Float
-  avgBidSpent: Float
+  bidsWinRate: Float
+  CTR: Float
+  avgCPC: Float
+  avgCPM: Float
   avgBidCost: Float
-  
-  startDate: String @fake(type: pastDate)
-  endDate: String @fake(type: pastDate)
-    dailySpentPercent: Float
-  overallSpentPercent: Float
-  
-  year: String @examples(values: ["2015", "2016", "2017"])
-  month: String @examples(values: ["04", "05", "06"])
-  week: String @examples(values: ["25", "26", "27"])
-  weeday: String @examples(values: ["1", "2", "3"])
-  date: String @examples(values: ["2017-07-15", "2017-07-14", "2017-07-17", "2017-07-18", "2017-07-16", "2017-07-20", "2017-07-19"])
+  avgMbBidCost: Float
   hour: String @examples(values: ["01","02", "03", "07", "08", "12", "15", "19", "21"])
+  date: String @examples(values: ["2017-07-15", "2017-07-14", "2017-07-17", "2017-07-18", "2017-07-16", "2017-07-20", "2017-07-19"])
+  weekday: String @examples(values: ["1", "2", "3"])
+  week: String @examples(values: ["25", "26", "27"])
+  month: String @examples(values: ["04", "05", "06"])
+  year: String @examples(values: ["2015", "2016", "2017"])
   exchangeId: String @fake(type: uuid)
   publisherId: String @fake(type: uuid)
   ip: String @fake(type: ipv4Address)
   deviceOs: DeviceOs
   deviceType: DeviceType
-  deviceVersion: String @fake(type: semver)
+  deviceOsVersion: String @fake(type: semver)
+  deviceBrand: String @examples(values: ["Nokia", "Samsung", "Apple", "Oneplus", "Motorolla", "Oppo"])
+  deviceModel: String @examples(values: ["iphone5", "iphone6", "one", "galaxys6", "razor", "andromeda"])
   connectionType: ConnectionType
-  countryCode: String @examples(values: ["FR", "DE", "IN", "US", "ES", "CR"])
   region: String @fake(type: state)
   city: String @fake(type: city)
   isp: String @fake(type: companyName)
-  
-  
-  companyIddd: String @fake(type: uuid)
-  offerId: String @fake(type: uuid)
-  campaignId: String @fake(type: uuid)
-  creativeId: String @fake(type: uuid)
-  
   company: Company
   offer: Offer
   campaign: Campaign
   creative:Creative
+  countryCode: String @examples(values: ["FR", "DE", "IN", "US", "ES", "CR"])
+  dailySpentPercent: Float
+  overallSpentPercent: Float
 }
 
 type Report {
@@ -214,12 +203,14 @@ type Setting {
 }
 
 input RowFilter {
-    offer_in: [String]
+  offer_in: [String]
   campaign_in: [String]
   company_in: [String]
   creative_in: [String]
   dateStart_in: [String]
   dateEnd_in: [String]
+  date_gte: String
+  date_lte: String
 }
 
 input ReportFilter {
@@ -255,6 +246,25 @@ input ReportFilter {
   week: String
   day: String
   date: String
+}
+
+input FID {
+  id: String
+}
+
+input OfferFilter {
+  user: FID
+  company: FID
+}
+
+input CampaignFilter {
+  offer_has: FID
+  status_in: [CampaignStatus]
+  ctrModel_in: [CTRModel]
+}
+
+input TargetFilter {
+  dimension: Dimension
 }
 
 enum CreativeType {
@@ -371,25 +381,6 @@ enum Dimension {
 }
 
 scalar Date
-
-input FID {
-  id: String
-}
-
-input OfferFilter {
-  user: FID
-  company: FID
-}
-
-input CampaignFilter {
-  offer_has: FID
-  status_in: [CampaignStatus]
-  ctrModel_in: [CTRModel]
-}
-
-input TargetFilter {
-  dimension: Dimension
-}
 
 type Query {
   allCompanies: [Company!]
