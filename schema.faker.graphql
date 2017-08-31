@@ -53,7 +53,6 @@ type Campaign {
   minBidPrice: Float,
   dailyBudget: Float,
   overallBudget: Float,
-  deviceOss: [DeviceOs]
   startDate: String @fake(type: pastDate)
   endDate: String @fake(type: futureDate)
   startHour: Int
@@ -171,6 +170,7 @@ type Report {
   rows: [ReportRow],
   totals: ReportRow
 }
+
 
 type AppDetail {
   id: String @fake(type: uuid)
