@@ -394,6 +394,7 @@ type Query {
   offer(id: String): Offer
   campaign(id: String): Campaign
   user(id: String): User
+  creative(id: String): Creative
   report(filter: ReportFilter, limit: Int, Offset: Int): Report
   setting: Setting
 }
