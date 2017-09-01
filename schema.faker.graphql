@@ -40,8 +40,9 @@ type Offer {
   campaignAggregatedCountryCodes: [String] @examples(values: ["FR", "DE", "IN", "US", "ES", "CR"])
   activeCampaigns: Int
   pausedCampaigns: Int
+  appBundle: String
   appDetail: AppDetail
-    campaigns: [Campaign]
+  campaigns: [Campaign]
   company: Company
 }
 
