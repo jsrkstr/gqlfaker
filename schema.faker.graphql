@@ -77,6 +77,7 @@ type Campaign {
   targets(filter: TargetFilter): [Target]
 }
 
+
 type Target {
   dimension: Dimension
   values: [String] @examples(values: ["IN", "FR", "MD", "DE", "UK", "US"])
