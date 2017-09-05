@@ -213,6 +213,9 @@ input RowFilter {
   dateEnd_in: [String]
   date_gte: String
   date_lte: String
+  
+  offer_has: FID
+  campaign_has: FID
 }
 
 input ReportFilter {
