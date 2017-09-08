@@ -214,7 +214,6 @@ input RowFilter {
   date_gte: String
   date_lte: String
   
-  
   offer_has: FID
   campaign_has: FID
 }
