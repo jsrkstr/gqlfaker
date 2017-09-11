@@ -78,11 +78,16 @@ type Campaign {
   targets(filter: TargetFilter): [Target]
 }
 
+type TargetValue {
+  list: [String] @examples(values: ["IN", "FR", "MD", "DE", "UK", "US"]),
+  blacklist: Boolean
+  min: String,
+  max: String
+}
 
 type Target {
   dimension: Dimension
-  values: [String] @examples(values: ["IN", "FR", "MD", "DE", "UK", "US"])
-  blacklist: Boolean
+  value: TargetValue
 }
 
 type Creative {
