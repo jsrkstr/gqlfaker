@@ -78,16 +78,9 @@ type Campaign {
   targets(filter: TargetFilter): [Target]
 }
 
-type TargetValue {
-  list: [String] @examples(values: ["IN", "FR", "MD", "DE", "UK", "US"]),
-  blacklist: Boolean
-  min: String,
-  max: String
-}
-
 type Target {
   dimension: Dimension
-  value: TargetValue
+  value: JSON @examples(values: [{ list: ["FR", "US", "DE"], blacklist: false, min: "10-09-2017", max: "20-09-2017"}])
 }
 
 type Creative {
@@ -276,6 +269,7 @@ input CampaignFilter {
 
 input TargetFilter {
   dimension: Dimension
+  dimension_in: [Dimension]
 }
 
 enum CreativeType {
@@ -381,6 +375,7 @@ enum GroupBy {
 }
 
 enum Dimension {
+  Date,
   DeviceOs,
   CountryCode,
   PublisherId,
@@ -392,6 +387,7 @@ enum Dimension {
 }
 
 scalar Date
+scalar JSON
 
 type Query {
   allCompanies: [Company!]
