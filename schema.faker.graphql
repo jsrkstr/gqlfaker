@@ -54,10 +54,7 @@ type Campaign {
   minBidPrice: Float,
   dailyBudget: Float,
   overallBudget: Float,
-  startDate: String @fake(type: pastDate)
-  endDate: String @fake(type: futureDate)
-  startHour: Int
-  endHour: Int
+  cmpType: CMPType,
   cmpPrice: Float
   minCmpPrice: Float
   clickUrl: String @fake(type: url)
@@ -272,6 +269,11 @@ input TargetFilter {
   dimension_in: [Dimension]
 }
 
+input TargetInput {
+  dimension: Dimension
+  vaue: JSON
+}
+
 enum CreativeType {
   Banner
   AdTag
@@ -295,6 +297,11 @@ enum Role {
 enum ListType {
   Black
   White
+}
+
+enum CMPType {
+  CPC
+  CPM
 }
 
 enum CPMPricingStrategy {
@@ -409,14 +416,14 @@ type Mutation {
   createUser(name: String, password: String, email: String, role: Role, picture: String, active: Boolean, readonly: Boolean, emailNotification: Boolean, companyId: String): User
   createCompany(name: String, picture: String, cpmAllowed: Boolean, cpcAllowed: Boolean, cpmPricingStrategy: CPMPricingStrategy, cpcPricingStrategy: CPCPricingStrategy, cpmCutRate: Float, overdraftAllowed: Boolean, maxOverdraftAmount: Float): Company
   createOffer(name: String, status: OfferStatus, Description: String, picture: String, advertiserDomain: String, startDate: Date, endDate: Date, userId: String, appId: String, appBundle: String, companyId: String): Offer
-  createCampaign(name: String, status: CampaignStatus, bidPrice: Float, minBidPrice: Float, dailyBudget: Float, overallBudget: Float, startDate: Date, endDate: Date, startHour: Int, endHour: Int, cmpPrice: Float, minCmpPrice: Float, clickUrl: String, osVersionMin: String, osVersionMax: String, spendingMode: SpendingMode, manualBoost: Int, biddingStrategy: BiddingStrategy, ctrModel: CTRModel, ctrModelTrainDays: Int, sameDeviceDailyCap: Int, deviceIdRequired: Boolean, iUrl: String, impressionPixelUrls: [String]): Campaign
+  createCampaign(name: String, status: CampaignStatus, dailyBudget: Float, overallBudget: Float, cmpType: CMPType, cmpPrice: Float, minCmpPrice: Float, clickUrl: String, spendingMode: SpendingMode, manualBoost: Int, biddingStrategy: BiddingStrategy, ctrModel: CTRModel, ctrModelTrainDays: Int, sameDeviceDailyCap: Int, iUrl: String, impressionPixelUrls: [String], targets: [TargetInput]): Campaign
   createAppDetail(storeUrl: String): AppDetail
   createCreative(name: String, offerId: String, campaignId: String, type: CreativeType, picture: String, html: String, height: Int, width: Int): Creative
   createCredit(companyId: String, userId: String, comment: String, amount: Float): Credit
   updateUser(id: String, name: String, password: String, email: String, role: Role, picture: String, active: Boolean, readonly: Boolean, emailNotification: Boolean, companyId: String): User
   updateCompany(id: String, name: String, picture: String, cpmAllowed: Boolean, cpcAllowed: Boolean, cpmPricingStrategy: CPMPricingStrategy, cpcPricingStrategy: CPCPricingStrategy, cpmCutRate: Float, overdraftAllowed: Boolean, maxOverdraftAmount: Float): Company
   updateOffer(id: String, name: String, status: OfferStatus, Description: String, picture: String, advertiserDomain: String, startDate: Date, endDate: Date, userId: String, appId: String, appBundle: String, companyId: String): Offer
-  updateCampaign(id: String, name: String, status: CampaignStatus, bidPrice: Float, minBidPrice: Float, dailyBudget: Float, overallBudget: Float, startDate: Date, endDate: Date, startHour: Int, endHour: Int, cmpPrice: Float, minCmpPrice: Float, clickUrl: String, osVersionMin: String, osVersionMax: String, spendingMode: SpendingMode, manualBoost: Int, biddingStrategy: BiddingStrategy, ctrModel: CTRModel, ctrModelTrainDays: Int, sameDeviceDailyCap: Int, deviceIdRequired: Boolean, iUrl: String, impressionPixelUrls: [String]): Campaign
+  updateCampaign(id: String, name: String, status: CampaignStatus,dailyBudget: Float, overallBudget: Float, cmpType: CMPType, cmpPrice: Float, minCmpPrice: Float, clickUrl: String, spendingMode: SpendingMode, manualBoost: Int, biddingStrategy: BiddingStrategy, ctrModel: CTRModel, ctrModelTrainDays: Int, sameDeviceDailyCap: Int, iUrl: String, impressionPixelUrls: [String], targets: [TargetInput]): Campaign
   updateCreative(id: String!, name: String, offerId: String, campaignId: String, type: CreativeType, picture: String, html: String, height: Int, width: Int): Creative
   deleteCompany(id: String): Company
   deleteCreative(id: String): Creative
