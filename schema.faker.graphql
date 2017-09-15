@@ -82,6 +82,7 @@ type Target {
 
 type Creative {
   id: String @examples(values: ["1", "2", "3", "4", "5"])
+  active: Boolean
   name: String @fake(type:filename)
   offer: Offer
   campaign: Campaign
@@ -200,6 +201,11 @@ type Setting {
   exchanges: [String] @examples(values: ["MOBFOX", "RED", "GREEN", "YELLOW", "ORANGE", "BLUE"])
 }
 
+input RowObjectFilter {
+  id: String
+  name_contains: String
+}
+
 input RowFilter {
   offer_in: [String]
   campaign_in: [String]
@@ -210,8 +216,9 @@ input RowFilter {
   date_gte: String
   date_lte: String
   
-  offer_has: FID
-  campaign_has: FID
+  company_has: RowObjectFilter
+  offer_has: RowObjectFilter
+  campaign_has: RowObjectFilter
 }
 
 input ReportFilter {
@@ -333,7 +340,7 @@ enum CTRModel {
 
 enum DeviceOs {
   Android
-  Ios
+  IOS
   Other
 }
 
@@ -430,8 +437,8 @@ type Mutation {
   deleteUser(id: String): User
   deleteCampaign(id: String): Campaign
   deleteOffer(id: String): Offer
-  addCreativeToCampaign(id: String, campaignId: String!, active: Boolean): Creative
-  removeCreativeFromCampaign(id: String!, campaignId: String!): Creative
+  attachCreativesToCampaign(creativeIds: [String]!, campaignId: String!, active: Boolean): [Creative]
+  detachCreativesToCampaign(creativeIds: [String]!, campaignId: String!): [Creative]
   cloneCampaign(id: String, name: String): Campaign
   createModelPerformance(time: String, folds: Int, avgAuc: Float, avgFscore: Float, model: String, groupId: String): ModelPerformance
   updateModelPerformance(id: String, time: String, folds: Int, avgAuc: Float, avgFscore: Float, model: String, groupId: String): ModelPerformance
