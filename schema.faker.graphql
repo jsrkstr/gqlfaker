@@ -129,9 +129,18 @@ type Expense {
 type ReportRow {
   bidsDone: Int
   bidsWon: Int
+  bidsCost: Int
+  bidsFee: Int
+    avgBidFee: Int
+  avgBidPrice: Int
+  CPM: Int
+  CPC: Int
+  PPM: Int
+  PPC: Int
+  bidsPrice:Int
   clicks: Int
   spent: Float
-  bidsWinRate: Float
+  bidWinRate: Float
   CTR: Float
   avgCPC: Float
   avgCPM: Float
@@ -262,7 +271,8 @@ input FID {
 
 input OfferFilter {
   user: FID
-  company: FID
+  company: FID,
+  company_has: FID
 }
 
 input CampaignFilter {
@@ -278,7 +288,7 @@ input TargetFilter {
 
 input TargetInput {
   dimension: Dimension
-  vaue: JSON
+  value: JSON
 }
 
 enum CreativeType {
@@ -334,7 +344,7 @@ enum BiddingStrategy {
 }
 
 enum CTRModel {
-  VWLOGISTIC,
+  VWLogistic,
   Beta
 }
 
@@ -390,14 +400,19 @@ enum GroupBy {
 
 enum Dimension {
   Date,
+  Hour,
   DeviceOs,
+  OsVersion,
+  DeviceType,
   CountryCode,
   PublisherId,
   ExchangeId,
   ISP,
+  ConnectionType,
   Category,
   Region,
-  City
+  City,
+  OnlyRealDeviceID
 }
 
 scalar Date
@@ -422,8 +437,8 @@ type Query {
 type Mutation {
   createUser(name: String, password: String, email: String, role: Role, picture: String, active: Boolean, readonly: Boolean, emailNotification: Boolean, companyId: String): User
   createCompany(name: String, picture: String, cpmAllowed: Boolean, cpcAllowed: Boolean, cpmPricingStrategy: CPMPricingStrategy, cpcPricingStrategy: CPCPricingStrategy, cpmCutRate: Float, overdraftAllowed: Boolean, maxOverdraftAmount: Float): Company
-  createOffer(name: String, status: OfferStatus, Description: String, picture: String, advertiserDomain: String, startDate: Date, endDate: Date, userId: String, appId: String, appBundle: String, companyId: String): Offer
-  createCampaign(name: String, status: CampaignStatus, dailyBudget: Float, overallBudget: Float, cmpType: CMPType, cmpPrice: Float, minCmpPrice: Float, clickUrl: String, spendingMode: SpendingMode, manualBoost: Int, biddingStrategy: BiddingStrategy, ctrModel: CTRModel, ctrModelTrainDays: Int, sameDeviceDailyCap: Int, iUrl: String, impressionPixelUrls: [String], targets: [TargetInput]): Campaign
+  createOffer(name: String, status: OfferStatus, Description: String, picture: String, advertiserDomain: String, startDate: Date, endDate: Date, userId: String, appDetailId: String, appBundle: String, companyId: String): Offer
+  createCampaign(name: String, offerId: String, status: CampaignStatus, dailyBudget: Float, overallBudget: Float, cmpType: CMPType, cmpPrice: Float, minCmpPrice: Float, clickUrl: String, spendingMode: SpendingMode, manualBoost: Int, biddingStrategy: BiddingStrategy, ctrModel: CTRModel, ctrModelTrainDays: Int, sameDeviceDailyCap: Int, iUrl: String, impressionPixelUrls: [String], targets: [TargetInput]): Campaign
   createAppDetail(storeUrl: String): AppDetail
   createCreative(name: String, offerId: String, campaignId: String, type: CreativeType, picture: String, html: String, height: Int, width: Int): Creative
   createCredit(companyId: String, userId: String, comment: String, amount: Float): Credit
