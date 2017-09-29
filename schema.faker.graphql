@@ -1,4 +1,4 @@
-# v1 This is sample IDL schema for GraphQL Faker. 
+# v2 This is sample IDL schema for GraphQL Faker. 
 #
 # There are two directives you can use to enhance fake data:
 #   - @fake
@@ -289,6 +289,7 @@ input TargetFilter {
 input TargetInput {
   dimension: Dimension
   value: JSON
+  __typename: String
 }
 
 enum CreativeType {
