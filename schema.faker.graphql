@@ -1,4 +1,4 @@
-# v3 This is sample IDL schema for GraphQL Faker. 
+# v4 This is sample IDL schema for GraphQL Faker. 
 #
 # There are two directives you can use to enhance fake data:
 #   - @fake
@@ -431,7 +431,7 @@ type Query {
   campaign(id: String): Campaign
   user(id: String): User
   creative(id: String): Creative
-  report(filter: ReportFilter, limit: Int, Offset: Int): Report
+  report(filter: ReportFilter, limit: Int, Offset: Int, cacheBuster: String): Report
   setting: Setting
 }
 
