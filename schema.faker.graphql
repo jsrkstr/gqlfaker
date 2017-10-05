@@ -1,4 +1,4 @@
-# v2 This is sample IDL schema for GraphQL Faker. 
+# v3 This is sample IDL schema for GraphQL Faker. 
 #
 # There are two directives you can use to enhance fake data:
 #   - @fake
@@ -36,7 +36,7 @@ type Offer {
   advertiserDomain: String @fake(type: domainName)
     startDate: String @fake(type: pastDate)
   endDate: String @fake(type: futureDate)
-  campaignAggregatedOss: [DeviceOs]
+  campaignAggregatedOss: [DeviceOS]
   campaignAggregatedCountryCodes: [String] @examples(values: ["FR", "DE", "IN", "US", "ES", "CR"])
   activeCampaigns: Int
   pausedCampaigns: Int
@@ -155,7 +155,7 @@ type ReportRow {
   exchangeId: String @fake(type: uuid)
   publisherId: String @fake(type: uuid)
   ip: String @fake(type: ipv4Address)
-  deviceOs: DeviceOs
+  deviceOS: DeviceOS
   deviceType: DeviceType
   deviceOsVersion: String @fake(type: semver)
   deviceBrand: String @examples(values: ["Nokia", "Samsung", "Apple", "Oneplus", "Motorolla", "Oppo"])
@@ -184,7 +184,7 @@ type AppDetail {
   name: String @fake(type:productName)
   advertiserDomain: String @fake(type: domainName)
     picture: String @fake(type:imageUrl)
-  deviceOs: DeviceOs
+  deviceOS: DeviceOS
   description: String @fake(type: lorem, options: {loremSize: sentences})
   geo: String @examples(values: ["FR", "IN", "DE", "UK", "US"])
   size: String @examples(values: ["10mb", "5mb", "20mb"])
@@ -250,7 +250,7 @@ input ReportFilter {
   city: String
   connectionType: String
   
-  deviceOs: String
+  deviceOS: String
   deviceOsVersion: String
   deviceType: String
   deviceModel: String
@@ -349,7 +349,7 @@ enum CTRModel {
   Beta
 }
 
-enum DeviceOs {
+enum DeviceOS {
   Android
   IOS
   Other
@@ -383,7 +383,7 @@ enum GroupBy {
   CreativeId,
   ExchangeId,
   PublisherId,
-  DeviceOs,
+  DeviceOS,
   DeviceType,
   DeviceOsVersion,
   DeviceBrand,
@@ -402,7 +402,7 @@ enum GroupBy {
 enum Dimension {
   Date,
   Hour,
-  DeviceOs,
+  DeviceOS,
   OsVersion,
   DeviceType,
   CountryCode,
