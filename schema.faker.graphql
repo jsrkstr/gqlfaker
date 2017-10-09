@@ -1,4 +1,4 @@
-# v4 This is sample IDL schema for GraphQL Faker. 
+# v5 This is sample IDL schema for GraphQL Faker. 
 #
 # There are two directives you can use to enhance fake data:
 #   - @fake
@@ -208,6 +208,11 @@ type Setting {
   dailyBudget: Float
   exchangeBlacklist: [String] @examples(values: ["MOBFOX", "RED", "GREEN", "YELLOW", "ORANGE", "BLUE"])
   exchanges: [String] @examples(values: ["MOBFOX", "RED", "GREEN", "YELLOW", "ORANGE", "BLUE"])
+}
+
+type Exchange {
+  id: String @fake(type: uuid),
+  name: String @examples(values: ["MOPUB", "MOBFOX", "DEFAULT", "SMARTYADS", "DOUBLECLICK", "INNERACTIVE", "APPLOVIN", "GAMELOFT"])
 }
 
 input RowObjectFilter {
@@ -426,6 +431,7 @@ type Query {
   allUsers: [User]
   allCreatives(filter: CampaignFilter): [Creative]
   allModelPerformances: [ModelPerformance]
+  allExchanges: [Exchange]
   company(id: String): Company
   offer(id: String): Offer
   campaign(id: String): Campaign
