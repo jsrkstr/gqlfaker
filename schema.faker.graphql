@@ -1,4 +1,4 @@
-# v6 This is sample IDL schema for GraphQL Faker. 
+# v7 This is sample IDL schema for GraphQL Faker. 
 #
 # There are two directives you can use to enhance fake data:
 #   - @fake
@@ -207,7 +207,9 @@ type ModelPerformance {
 type Setting {
   dailyBudget: Float
   exchangeBlacklist: [String] @examples(values: ["MOBFOX", "RED", "GREEN", "YELLOW", "ORANGE", "BLUE"])
-  exchanges: [String] @examples(values: ["MOBFOX", "RED", "GREEN", "YELLOW", "ORANGE", "BLUE"])
+  assetHosts: [String] @examples(values: ["test01.com", "test02.com", "test03.com"])
+  assetDefaultHost: String @examples(values: ["test01.com", "test02.com", "test03.com"])
+  assetExchangeHosts: JSON @examples(values: [{smartyAds: "test01.com", mobfox: "test02.com"}] )
 }
 
 type Exchange {
@@ -469,5 +471,5 @@ type Mutation {
   updateModelPerformance(id: String, time: String, folds: Int, avgAuc: Float, avgFscore: Float, model: String, groupId: String): ModelPerformance
   deleteModelPerformance(id: String): ModelPerformance
   updateCampaignModelTime(id: String): Campaign
-  updateSetting(dailyBudget: Float, exchangeBlacklist: [String]): Setting
+  updateSetting(dailyBudget: Float, exchangeBlacklist: [String], assetDefaultHost: String, assetExchangeHosts: JSON): Setting
 }
