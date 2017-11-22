@@ -1,4 +1,4 @@
-# v7 This is sample IDL schema for GraphQL Faker. 
+# v8 This is sample IDL schema for GraphQL Faker. 
 #
 # There are two directives you can use to enhance fake data:
 #   - @fake
@@ -40,7 +40,8 @@ type Offer {
   campaignAggregatedCountryCodes: [String] @examples(values: ["FR", "DE", "IN", "US", "ES", "CR"])
   activeCampaigns: Int
   pausedCampaigns: Int
-  appBundle: String @fake(type: domainName)
+  appleStoreId: String @fake(type: zipCode)
+  androidAppBundle: String @fake(type: domainName)
   appDetail: AppDetail
   campaigns: [Campaign]
   company: Company
@@ -217,6 +218,27 @@ type Exchange {
   name: String @examples(values: ["MOPUB", "MOBFOX", "DEFAULT", "SMARTYADS", "DOUBLECLICK", "INNERACTIVE", "APPLOVIN", "GAMELOFT"])
 }
 
+type Segment {
+  id: String @fake(type: uuid),
+  name: String @fake(type: productName)
+  lookAlikeHistogram: [LookAlikePair]!
+  lookAlikeThreshold: Float!
+  segmentFingerprint: SegmentFingerprint!
+  company: Company!
+  spec: SegmentSpec!
+}
+
+type SegmentSpec {
+  attr: SegmentAttribute
+  op: ValueOperator
+  val: String
+  negated: Boolean
+  recency: Int
+  indirection: [String]
+  operator: NodeOperator
+  specs: [SegmentSpec]
+}
+
 input RowObjectFilter {
   id: String
   name_contains: String
@@ -291,6 +313,7 @@ input CampaignFilter {
   ctrModel_in: [CTRModel]
 }
 
+
 input TargetFilter {
   dimension: Dimension
   dimension_in: [Dimension]
@@ -302,10 +325,26 @@ input TargetInput {
   __typename: String
 }
 
+input SegmentFilter {
+  company_has: FID
+}
+
+input SegmentSpecInput {
+  attr: SegmentAttribute
+  op: ValueOperator
+  val: String
+  negated: Boolean
+  recency: Int
+  indirection: [String]
+  operator: NodeOperator
+  specs: [SegmentSpecInput]
+}
+
 enum CreativeType {
   Banner
   AdTag
 }
+
 
 enum OfferStatus {
   Active
@@ -426,8 +465,61 @@ enum Dimension {
   OnlyRealDeviceID
 }
 
+
+enum ValueOperator {
+  bigger_than,
+  bigger_than_equals,
+  smaller_than,
+  smaller_than_equals,
+  regex,
+  equals
+}
+
+enum NodeOperator {
+  and
+  or
+}
+
+enum SegmentAttribute {
+  appid,
+  app_category,
+  app_keywords,
+  publisherid,
+  user_age_min,
+  user_age_max,
+  user_gender,
+  user_keywords,
+  user_segments,
+  city,
+  region,
+  country_code,
+  connection_type,
+  isp,
+  device_os,
+  device_type,
+  in_segment,
+  appid_magnitude,
+  appid_times_seens,
+  app_category_magnitude,
+  app_category_times_seen,
+  app_keyword_magnitude,
+  publisherid_times_seen,
+  city_magnitude,
+  region_magnitude,
+  country_code_magnitude,
+  appid_main_value,
+  app_category_main_value,
+  publisherid_main_value,
+  city_main_value,
+  region_main_value,
+  country_main_value
+}
+
 scalar Date
 scalar JSON
+
+scalar LookAlikePair
+scalar SegmentFingerprint
 
 type Query {
   allCompanies: [Company!]
@@ -437,6 +529,7 @@ type Query {
   allCreatives(filter: CampaignFilter): [Creative]
   allModelPerformances: [ModelPerformance]
   allExchanges: [Exchange]
+  allSegments(filter: SegmentFilter): [Segment]
   company(id: String): Company
   offer(id: String): Offer
   campaign(id: String): Campaign
@@ -444,6 +537,7 @@ type Query {
   creative(id: String): Creative
   report(filter: ReportFilter, limit: Int, Offset: Int, cacheBuster: String): Report
   setting: Setting
+  segment(id: String): Segment
 }
 
 type Mutation {
@@ -454,16 +548,19 @@ type Mutation {
   createAppDetail(storeUrl: String): AppDetail
   createCreative(name: String, offerId: String, campaignId: String, type: CreativeType, picture: String, html: String, height: Int, width: Int): Creative
   createCredit(companyId: String, userId: String, comment: String, amount: Float): Credit
+  createSegment(name: String, spec: SegmentSpecInput): Segment
   updateUser(id: String, name: String, password: String, email: String, role: Role, picture: String, active: Boolean, readonly: Boolean, emailNotification: Boolean, companyId: String): User
   updateCompany(id: String, name: String, picture: String, cpmAllowed: Boolean, cpcAllowed: Boolean, cpmPricingStrategy: CPMPricingStrategy, cpcPricingStrategy: CPCPricingStrategy, cpmCutRate: Float, overdraftAllowed: Boolean, maxOverdraftAmount: Float): Company
   updateOffer(id: String, name: String, status: OfferStatus, Description: String, picture: String, advertiserDomain: String, startDate: Date, endDate: Date, userId: String, appId: String, appBundle: String, companyId: String): Offer
   updateCampaign(id: String, name: String, status: CampaignStatus,dailyBudget: Float, overallBudget: Float, cmpType: CMPType, cmpPrice: Float, minCmpPrice: Float, clickUrl: String, spendingMode: SpendingMode, manualBoost: Int, biddingStrategy: BiddingStrategy, ctrModel: CTRModel, ctrModelTrainDays: Int, sameDeviceDailyCap: Int, iUrl: String, impressionPixelUrls: [String], targets: [TargetInput]): Campaign
   updateCreative(id: String!, name: String, offerId: String, campaignId: String, type: CreativeType, picture: String, html: String, height: Int, width: Int): Creative
+  updateSegment(id: String!, name: String, spec: SegmentSpecInput): Segment
   deleteCompany(id: String): Company
   deleteCreative(id: String): Creative
   deleteUser(id: String): User
   deleteCampaign(id: String): Campaign
   deleteOffer(id: String): Offer
+  deleteSegment(id: String): Segment
   attachCreativesToCampaign(creativeIds: [String]!, campaignId: String!, active: Boolean): [Creative]
   detachCreativesToCampaign(creativeIds: [String]!, campaignId: String!): [Creative]
   cloneCampaign(id: String, name: String): Campaign
