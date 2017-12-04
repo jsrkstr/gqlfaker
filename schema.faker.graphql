@@ -1,4 +1,4 @@
-# v8 This is sample IDL schema for GraphQL Faker. 
+# v9 This is sample IDL schema for GraphQL Faker. 
 #
 # There are two directives you can use to enhance fake data:
 #   - @fake
@@ -230,12 +230,12 @@ type Segment {
 
 type SegmentSpec {
   attr: SegmentAttribute
-  op: ValueOperator
+  op: SegmentAttributeOperator
   val: String
   negated: Boolean
   recency: Int
   indirection: [String]
-  operator: NodeOperator
+  operator: SegmentLogicalOperator
   specs: [SegmentSpec]
 }
 
@@ -331,12 +331,12 @@ input SegmentFilter {
 
 input SegmentSpecInput {
   attr: SegmentAttribute
-  op: ValueOperator
+  op: SegmentAttributeOperator
   val: String
   negated: Boolean
   recency: Int
   indirection: [String]
-  operator: NodeOperator
+  operator: SegmentLogicalOperator
   specs: [SegmentSpecInput]
 }
 
@@ -462,11 +462,12 @@ enum Dimension {
   Category,
   Region,
   City,
-  OnlyRealDeviceID
+  OnlyRealDeviceID,
+  SegmentId
 }
 
 
-enum ValueOperator {
+enum SegmentAttributeOperator {
   bigger_than,
   bigger_than_equals,
   smaller_than,
@@ -475,7 +476,7 @@ enum ValueOperator {
   equals
 }
 
-enum NodeOperator {
+enum SegmentLogicalOperator {
   and
   or
 }
